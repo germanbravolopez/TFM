@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 20.02.2019 02:22:18
 -- Design Name: VGA synchronization testing circuit with 3 switches
--- Module Name: vga_test - Behavioral
+-- Module Name: vga_test_sw - Behavioral
 -- Project Name: image_filtering
 -- Target Devices: 
 -- Tool Versions: 
@@ -21,24 +21,24 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity vga_test is
+entity vga_test_sw is
     port ( 
         clk100, reset : in std_logic;
         sw            : in std_logic_vector(2 downto 0);
         hsync, vsync  : out std_logic;
         rgb           : out std_logic_vector (2 downto 0)
     );
-end vga_test;
+end vga_test_sw;
 
-architecture Behavioral of vga_test is
+architecture Behavioral of vga_test_sw is
   signal rgb_reg  : std_logic_vector(2 downto 0);
   signal video_on : std_logic;
 begin
     -- instantiate VGA sync circuit
     vga_sync_unit: entity work.vga_sync
-        port map (clk100 => clk100, reset => reset, hsync => hsync,
-                  vsync => vsync, video_on => video_on, 
-                  p_tick => open, pixel_x => open, pixel_y => open);
+        port map (clk100 => clk100, reset => reset, hsync => hsync, vsync => vsync, 
+                  video_on => video_on, p_tick => open, pixel_x => open, 
+                  pixel_y => open);
     -- rgb buffer
     RGB_proc: process (clk100, reset, sw)
     begin

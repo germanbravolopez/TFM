@@ -1,13 +1,13 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity tb_vga_test is
+entity tb_vga_test_sw is
 --  Port ( );
-end tb_vga_test;
+end tb_vga_test_sw;
 
-architecture Testbench of tb_vga_test is
+architecture Testbench of tb_vga_test_sw is
   -- Test's component
-  component vga_test is
+  component vga_test_sw is
     port ( 
         clk100, reset : in std_logic;
         sw            : in std_logic_vector(2 downto 0);
@@ -22,8 +22,9 @@ architecture Testbench of tb_vga_test is
   constant period : time := 10 ns;
 begin
   -- Unit under test
-  UUT: vga_test
-    port map ( clk100 => clk100, reset => reset, sw => sw, hsync => hsync, vsync => vsync );
+  UUT: vga_test_sw
+    port map ( clk100 => clk100, reset => reset, sw => sw, hsync => hsync, 
+               vsync => vsync, rgb => rgb );
     
     -- Reset
     Reset_proc: process
@@ -42,7 +43,7 @@ begin
     -- Input data
     In_proc: process
     begin
-        sw <= "000"; wait for 10*period;
+        sw <= "010"; wait for 10*period;
 --        sw <= "001"; wait for 10*period;
 --        sw <= "010"; wait for 10*period;
 --        sw <= "011"; wait for 10*period;
