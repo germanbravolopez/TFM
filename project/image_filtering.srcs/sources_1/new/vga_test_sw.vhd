@@ -26,6 +26,7 @@ entity vga_test_sw is
         clk100, reset : in std_logic;
         sw            : in std_logic_vector(2 downto 0);
         hsync, vsync  : out std_logic;
+        led           : out std_logic;
         rgb           : out std_logic_vector (2 downto 0)
     );
 end vga_test_sw;
@@ -49,4 +50,6 @@ begin
         end if;
     end process;
     rgb <= rgb_reg when (video_on = '1') else "000";
+    
+    led <= '1' when (sw(0) = '1') else '0';
 end Behavioral;

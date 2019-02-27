@@ -41,7 +41,7 @@ architecture Behavioral of vga_sync is
   constant VF : integer := 10;  -- vertical front porch (bottom b.)
   constant VB : integer := 33;  -- vertical back porch (top b.)
   constant VR : integer := 2;   -- vertical retrace
-  -- mod-2 counter
+  -- mod-4 counter
   signal mod4_reg, mod4_next : unsigned(1 downto 0);
   -- sync counters
   signal v_count_reg, v_count_next : unsigned(9 downto 0);
