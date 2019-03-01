@@ -2,10 +2,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
-use work.constants.all;
-use work.bloques.all;
+use work.constants_lcse_test.all;
+use work.variables_lcse_test.all;
 
-entity graphics is
+entity graphics_lcse_test is
   port(
     video_on    : in std_logic;
     pixel_x     : in std_logic_vector(9 downto 0);
@@ -17,9 +17,9 @@ entity graphics is
 
     rgb : out std_logic_vector(5 downto 0)
     );
-end graphics;
+end graphics_lcse_test;
 
-architecture arq of graphics is
+architecture arq of graphics_lcse_test is
 
   signal C_BLOCK : integer;
   signal CUR_BLK : integer;

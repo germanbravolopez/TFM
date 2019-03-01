@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-package bloques is
+package variables_lcse_test is
 
 -- LEDS
   constant CUR_BLK_LD0_C : integer := 574;
@@ -51,4 +51,4 @@ package bloques is
   constant CUR_T_BLK6 : integer := CUR_BLK_TempLetra_C + 1 + 90;
   constant CUR_T_BLK7 : integer := CUR_BLK_TempLetra_C + 1 + 120;
 
-end bloques;
+end variables_lcse_test;

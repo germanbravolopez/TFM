@@ -43,7 +43,8 @@ begin
     -- Input data
     In_proc: process
     begin
-        sw <= "010"; wait for 10*period;
+        sw <= "010"; wait for 20ms;
+        sw <= "001"; wait;
 --        sw <= "001"; wait for 10*period;
 --        sw <= "010"; wait for 10*period;
 --        sw <= "011"; wait for 10*period;

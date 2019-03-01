@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-package constants is 
+package constants_lcse_test is 
 
 -- Revisar
     constant BLOCKS_WIDE    : integer := 30; -- 30 cuadros en la horizontal
@@ -30,4 +30,4 @@ package constants is
     constant vsync_ls  : std_logic_vector(9 downto 0):= "0111101011"; -- 491
     constant vsync_max : std_logic_vector(9 downto 0):= "1000001100"; -- 524
 
-end constants;
+end constants_lcse_test;

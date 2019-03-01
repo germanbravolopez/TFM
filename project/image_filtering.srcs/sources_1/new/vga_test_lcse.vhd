@@ -40,7 +40,7 @@ begin
                   video_on => video_on, p_tick => open, pixel_x => pixel_x, 
                   pixel_y => pixel_y);
     -- instantiate VGA graphics lcse
-    graphics_unit: entity work.graphics
+    graphics_unit: entity work.graphics_lcse_test
         port map (video_on => video_on, pixel_x => pixel_x, pixel_y => pixel_y,
                   rgb => rgb, temperatura => temperatura, actuadores => actuadores,
                   leds => leds);
