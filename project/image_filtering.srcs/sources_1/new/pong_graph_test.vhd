@@ -67,11 +67,6 @@ architecture Behavioral of pong_graph_test is
   signal ball_y_t : unsigned(9 downto 0) := to_unsigned(BALL_Y_T_cte,10);    
   signal ball_y_b : unsigned(9 downto 0) := to_unsigned(BALL_Y_B_cte,10);     
   ---------------------------------------------
-  -- square ball                               
-  ---------------------------------------------
-  signal wall_on, bar_on, sq_ball_on : std_logic;
-  signal wall_rgb, bar_rgb, ball_rgb : std_logic_vector(2 downto 0);
-  ---------------------------------------------
   -- round ball image ROM                          
   ---------------------------------------------
   type rom_type is array (0 to 7) of std_logic_vector(0 to 7);
@@ -90,10 +85,12 @@ architecture Behavioral of pong_graph_test is
   signal rom_addr, rom_col : unsigned(2 downto 0);
   signal rom_data          : std_logic_vector(7 downto 0);
   signal rom_bit           : std_logic;
-  -- new signal to indicate whether the scan coordinates are within 
-  -- the round ball region
-  signal rd_ball_on : std_logic;
-
+  ---------------------------------------------                     
+  -- object output signals                                          
+  ---------------------------------------------                     
+  signal wall_on, bar_on, sq_ball_on, rd_ball_on : std_logic;                   
+  signal wall_rgb, bar_rgb, ball_rgb : std_logic_vector(2 downto 0);
+  
 begin
 
     pix_x <= unsigned(pixel_x);

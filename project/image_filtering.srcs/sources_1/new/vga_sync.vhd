@@ -62,7 +62,7 @@ begin
     -- registers
     Reg_proc: process (clk100, reset)
     begin
-        if (reset = '0') then
+        if (reset = '1') then
             mod4_reg <= (others => '0');
             v_count_reg <= (others => '0');
             h_count_reg <= (others => '0');
