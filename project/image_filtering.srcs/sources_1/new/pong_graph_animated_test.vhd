@@ -28,7 +28,7 @@ entity pong_graph_animated_test is
         clk100, reset, video_on : in std_logic;
         sw                      : in std_logic_vector(1 downto 0);
         btn                     : in std_logic_vector(1 downto 0);
-        pixel_x, pixel_y        : in std_logic_vector(9 downto 0);
+        pixel_x, pixel_y        : in std_logic_vector(10 downto 0);
         graph_rgb               : out std_logic_vector(2 downto 0)
     );
 end pong_graph_animated_test;
@@ -36,7 +36,7 @@ end pong_graph_animated_test;
 architecture Behavioral of pong_graph_animated_test is
   signal refr_tick    : std_logic;
   -- x, y, coordinates (0,0) to (639, 479)
-  signal pix_x, pix_y : unsigned(9 downto 0);
+  signal pix_x, pix_y : unsigned(10 downto 0);
   constant MAX_X : integer := 640;
   constant MAX_Y : integer := 480;
   ---------------------------------------------
@@ -55,10 +55,10 @@ architecture Behavioral of pong_graph_animated_test is
   -- bar top, bottom boundary
   constant BAR_Y_T_cte : integer := MAX_Y/2 - BAR_Y_SIZE/2; -- 204
   constant BAR_Y_B_cte : integer := BAR_Y_T_cte + BAR_Y_SIZE - 1;
-  signal bar_y_t : unsigned(9 downto 0);-- := to_unsigned(BAR_Y_T_cte,10);
-  signal bar_y_b : unsigned(9 downto 0);-- := to_unsigned(BAR_Y_B_cte,10);
+  signal bar_y_t : unsigned(10 downto 0);-- := to_unsigned(BAR_Y_T_cte,10);
+  signal bar_y_b : unsigned(10 downto 0);-- := to_unsigned(BAR_Y_B_cte,10);
   -- reg to track top boundary (x position is fixed)
-  signal bar_y_reg, bar_y_next : unsigned(9 downto 0);
+  signal bar_y_reg, bar_y_next : unsigned(10 downto 0);
   -- bar moving velocity when a button is pressed
   signal BAR_V : integer;-- := 2;
   ---------------------------------------------
@@ -68,22 +68,22 @@ architecture Behavioral of pong_graph_animated_test is
   -- ball left, right boundary                                  
   constant BALL_X_L_cte : integer := 580;                           
   constant BALL_X_R_cte : integer := BALL_X_L_cte + BALL_SIZE - 1; 
-  signal ball_x_l : unsigned(9 downto 0);-- := to_unsigned(BALL_X_L_cte,10);
-  signal ball_x_r : unsigned(9 downto 0);-- := to_unsigned(BALL_X_R_cte,10);                          
+  signal ball_x_l : unsigned(10 downto 0);-- := to_unsigned(BALL_X_L_cte,10);
+  signal ball_x_r : unsigned(10 downto 0);-- := to_unsigned(BALL_X_R_cte,10);                          
   -- ball top, bottom boundary                                  
   constant BALL_Y_T_cte : integer := 238; 
   constant BALL_Y_B_cte : integer := BALL_Y_T_cte + BALL_SIZE - 1; 
-  signal ball_y_t : unsigned(9 downto 0);-- := to_unsigned(BALL_Y_T_cte,10);    
-  signal ball_y_b : unsigned(9 downto 0);-- := to_unsigned(BALL_Y_B_cte,10);
+  signal ball_y_t : unsigned(10 downto 0);-- := to_unsigned(BALL_Y_T_cte,10);    
+  signal ball_y_b : unsigned(10 downto 0);-- := to_unsigned(BALL_Y_B_cte,10);
   -- reg to track left, top boundaries
-  signal ball_x_reg, ball_x_next : unsigned(9 downto 0);
-  signal ball_y_reg, ball_y_next : unsigned(9 downto 0);   
+  signal ball_x_reg, ball_x_next : unsigned(10 downto 0);
+  signal ball_y_reg, ball_y_next : unsigned(10 downto 0);   
   -- reg to track ball speed
-  signal x_delta_reg, x_delta_next : unsigned (9 downto 0);
-  signal y_delta_reg, y_delta_next : unsigned (9 downto 0);  
+  signal x_delta_reg, x_delta_next : unsigned (10 downto 0);
+  signal y_delta_reg, y_delta_next : unsigned (10 downto 0);  
   -- ball velocity can be positive or negative
-  signal BALL_V_P : unsigned(9 downto 0);-- := to_unsigned(1,10); -- signals for change vel 
-  signal BALL_V_N : unsigned(9 downto 0);-- := unsigned(to_signed(-1,10));
+  signal BALL_V_P : unsigned(10 downto 0);-- := to_unsigned(1,10); -- signals for change vel 
+  signal BALL_V_N : unsigned(10 downto 0);-- := unsigned(to_signed(-1,10));
   ---------------------------------------------
   -- round ball image ROM                          
   ---------------------------------------------
@@ -113,12 +113,12 @@ begin
     -- registers
     reg_proc: process (clk100, reset)
     begin
-        if (reset = '1') then
-            bar_y_reg <= to_unsigned(BAR_Y_T_cte,10);
-            ball_x_reg <= to_unsigned(BALL_X_L_cte,10);
-            ball_y_reg <= to_unsigned(BALL_Y_T_cte,10);
-            x_delta_reg <= ("0000000100");
-            y_delta_reg <= ("0000000100");
+        if (reset = '0') then
+            bar_y_reg <= to_unsigned(BAR_Y_T_cte,11);
+            ball_x_reg <= to_unsigned(BALL_X_L_cte,11);
+            ball_y_reg <= to_unsigned(BALL_Y_T_cte,11);
+            x_delta_reg <= ("00000000100");
+            y_delta_reg <= ("00000000100");
         elsif (clk100'event and clk100 = '1') then
             bar_y_reg <= bar_y_next;
             ball_x_reg <= ball_x_next;
@@ -134,6 +134,7 @@ begin
     --      i.e., when the screen is refreshed (60 Hz)
     refr_tick <= '1' when (sw(0) = '1') and (pix_y = 481) and (pix_x = 0) else
                  '0';              
+    
     ---------------------------------------------
     -- left vertical stripe (wall)                      
     ---------------------------------------------
@@ -141,6 +142,7 @@ begin
         '1' when (WALL_X_L <= pix_x) and (pix_x <= WALL_X_R) else
         '0';
     wall_rgb <= "001"; -- blue
+    
     ---------------------------------------------
     -- right vertical stripe                               
     ---------------------------------------------
@@ -166,6 +168,7 @@ begin
             end if;
         end if;
     end process;                               
+    
     ---------------------------------------------
     -- square ball                               
     ---------------------------------------------
@@ -194,13 +197,15 @@ begin
                    ball_x_reg;                                
     ball_y_next <= ball_y_reg + y_delta_reg when (refr_tick = '1') else
                    ball_y_reg;
+    
     -- velocity selector
-    BALL_V_P <= to_unsigned(1,10) when (sw(1) = '0') else
-                to_unsigned(2,10);
-    BALL_V_N <= unsigned(to_signed(-1,10)) when (sw(1) = '0') else
-                unsigned(to_signed(-2,10));
+    BALL_V_P <= to_unsigned(1,11) when (sw(1) = '0') else
+                to_unsigned(2,11);
+    BALL_V_N <= unsigned(to_signed(-1,11)) when (sw(1) = '0') else
+                unsigned(to_signed(-2,11));
     BAR_V    <= 2 when (sw(1) = '0') else
                 4;
+    
     -- new ball velocity
     ball_vel_proc: process (x_delta_reg, y_delta_reg, ball_x_l, ball_x_r, 
                             ball_y_t, ball_y_b, bar_y_t, bar_y_b, sw, 
@@ -221,6 +226,7 @@ begin
             end if;
         end if;
     end process;
+    
     ---------------------------------------------
     -- rgb multiplexing circuit                               
     ---------------------------------------------

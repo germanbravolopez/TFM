@@ -24,29 +24,50 @@ use ieee.std_logic_1164.all;
 
 entity pong_top_animated_test is
     port ( 
-        reset, clk100 : in std_logic;
-        sw            : in std_logic_vector(1 downto 0);
-        btn           : in std_logic_vector(1 downto 0);
-        hsync, vsync  : out std_logic;
-        led           : out std_logic_vector(2 downto 0);
-        rgb           : out std_logic_vector(2 downto 0)
+        reset, clk100  : in std_logic;
+        vga_resolution : in std_logic;
+        sw             : in std_logic_vector(1 downto 0);
+        btn            : in std_logic_vector(1 downto 0);
+        hsync, vsync   : out std_logic;
+        led            : out std_logic_vector(2 downto 0);
+        rgb            : out std_logic_vector(2 downto 0)
     );
 end pong_top_animated_test;
 
 architecture Behavioral of pong_top_animated_test is
 
-  signal pixel_x, pixel_y     : std_logic_vector(9 downto 0);
+  component vga_sync
+    port ( 
+        clk100, reset    : in std_logic;
+        vga_resolution   : in std_logic;
+        hsync, vsync     : out std_logic;
+        video_on, p_tick : out std_logic;
+        pixel_x, pixel_y : out std_logic_vector(10 downto 0) 
+    );
+  end component;
+  
+  component pong_graph_animated_test
+    port ( 
+        clk100, reset, video_on : in std_logic;
+        sw                      : in std_logic_vector(1 downto 0);
+        btn                     : in std_logic_vector(1 downto 0);
+        pixel_x, pixel_y        : in std_logic_vector(10 downto 0);
+        graph_rgb               : out std_logic_vector(2 downto 0)
+    );
+  end component;
+  
+  signal pixel_x, pixel_y     : std_logic_vector(10 downto 0);
   signal video_on, pixel_tick : std_logic;
   signal rgb_reg, rgb_next    : std_logic_vector(2 downto 0);
   
 begin
     -- instantiate VGA sync
-    vga_sync_unit: entity work.vga_sync                                            
+    vga_sync_unit: vga_sync                                            
         port map (clk100 => clk100, reset => reset, hsync => hsync, vsync => vsync,
                   video_on => video_on, p_tick => pixel_tick, pixel_x => pixel_x,           
-                  pixel_y => pixel_y); 
+                  pixel_y => pixel_y, vga_resolution => vga_resolution); 
     -- instantiate graphic generator 
-    pong_graph_animated_unit: entity work.pong_graph_animated_test                                            
+    pong_graph_animated_unit: pong_graph_animated_test                                            
                       port map (clk100 => clk100, reset => reset, btn => btn, sw => sw,
                                 video_on => video_on, pixel_x => pixel_x, pixel_y => pixel_y,
                                 graph_rgb => rgb_next); 
@@ -62,7 +83,7 @@ begin
     rgb <= rgb_reg;
     
     led(0) <= sw(0); -- start
-    led(1) <= btn(0) or btn (1); -- buttons for moving the right bar
-    led(2) <= sw(1); -- velocity selection (levels of difficulty)
+    led(1) <= sw(1); -- velocity selection (levels of difficulty)
+    led(2) <= btn(0) or btn (1); -- buttons for moving the right bar
     
 end Behavioral;

@@ -20,26 +20,42 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+use work.constants_vga_resolution.all;
 
 entity vga_test_sw is
     port ( 
-        clk100, reset : in std_logic;
-        sw            : in std_logic_vector(2 downto 0);
-        hsync, vsync  : out std_logic;
-        led           : out std_logic;
-        rgb           : out std_logic_vector (2 downto 0)
+        clk100, reset  : in std_logic;
+        vga_resolution : in std_logic;
+        sw             : in std_logic_vector(2 downto 0);
+        hsync, vsync   : out std_logic;
+        led            : out std_logic;
+        rgb            : out std_logic_vector (2 downto 0)
     );
 end vga_test_sw;
 
 architecture Behavioral of vga_test_sw is
+  
+  component vga_sync
+    port ( 
+        clk100, reset    : in std_logic;
+        vga_resolution   : in std_logic;
+        hsync, vsync     : out std_logic;
+        video_on, p_tick : out std_logic;
+        pixel_x, pixel_y : out std_logic_vector(10 downto 0) 
+    );
+  end component;
+  
   signal rgb_reg  : std_logic_vector(2 downto 0);
   signal video_on : std_logic;
+  
 begin
     -- instantiate VGA sync circuit
-    vga_sync_unit: entity work.vga_sync
+    vga_sync_unit: vga_sync
         port map (clk100 => clk100, reset => reset, hsync => hsync, vsync => vsync, 
                   video_on => video_on, p_tick => open, pixel_x => open, 
-                  pixel_y => open);
+                  pixel_y => open, vga_resolution => vga_resolution);
     -- rgb buffer
     RGB_proc: process (clk100, reset, sw)
     begin
