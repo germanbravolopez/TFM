@@ -17,7 +17,7 @@ clean:
 
 .PHONY: sim
 sim:
-	cd verification; $(vsim) $(sim_opts) -do "do sim.tcl;c;a"
+	cd verification; $(vsim) $(sim_opts) -do "do sim.tcl;c;s"
 
 .PHONY: gui
 gui: 

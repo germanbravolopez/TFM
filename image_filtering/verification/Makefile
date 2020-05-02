@@ -16,7 +16,7 @@ clean:
 
 .PHONY: sim
 sim:
-	$(vsim) $(sim_opts) -do "do sim.tcl;c;a"
+	$(vsim) $(sim_opts) -do "do sim.tcl;c;s"
 
 .PHONY: gui
 gui: 

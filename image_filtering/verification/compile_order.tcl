@@ -16,22 +16,3 @@ vcom -2008 +cover=bcst -mixedsvvh -work image_filtering ../rtl/image_filtering/i
 vcom -2008 +cover=bcst -mixedsvvh -work image_filtering ../rtl/image_filtering/top_filtering_system.vhd
 vlib build/uvm
 vmap uvm build/uvm
-vlog +cover=bcst  -work uvm ${loc_uvc_axis}pkg_axis.sv  \
-	+incdir+$loc_uvc_axis \
-	+incdir+${loc_uvc_axis}sequences/ \
-	+incdir+${loc_uvc_axis}coverage/
-vlog +cover=bcst  -work uvm ptr_ctrl_agent/pkg_ptr_ctrl.sv \
-	+incdir+ptr_ctrl_agent/ \
-	+incdir+ptr_ctrl_agent/sequences/ 
-vlog +cover=bcst  -work uvm pkg_test.sv  \
-	+incdir+$loc_pdtest \
-	+incdir+sequences/ \
-	+incdir+$loc_uvc_axis \
-	+incdir+${loc_uvc_axis}sequences/ \
-	+incdir+${loc_uvc_axis}coverage/ \
-	+incdir+ptr_ctrl_agent/ \
-	+incdir+ptr_ctrl_agent/sequences/ 	
-vlog +cover=bcst  -work uvm top.sv \
-	-L ip_standardfifo \
-	+incdir+$loc_uvc_axis \
-	+incdir+ptr_ctrl_agent/
